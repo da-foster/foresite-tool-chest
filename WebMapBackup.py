@@ -19,8 +19,8 @@ today = day.strftime("%m_%d_%y")
 
 #Provide log-in credentials for authentication#
 gis = GIS(url = "https://www.arcgis.com/sharing/rest/oauth2/authorize?client_id=arcgisonline&display=default&response_type=token&state=%7B%22returnUrl%22%3A%22https%3A%2F%2Fwww.arcgis.com%2Fhome%2Findex.html%22%2C%22useLandingPage%22%3Atrue%7D&expiration=20160&locale=en-us&redirect_uri=https%3A%2F%2Fwww.arcgis.com%2Fhome%2Faccountswitcher-callback.html&force_login=true&hideCancel=true&showSignupOption=true&signuptype=esri", \
-          username = "Knoxville1", \
-          password = "Foresite19!")
+          username = "******", \
+          password = "******")
 
 #Specify the desired existing web map using the query and item type#
 webmap_search = gis.content.search(query = "Knoxville_QC_Map_Live", item_type = "Web Map")

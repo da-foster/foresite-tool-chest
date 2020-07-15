@@ -797,10 +797,10 @@ print('\nProcess Complete')
 # Disregard for now
 # if __name__ == '__main__':
 #     hostname = "myaccount.sharefile.com"
-#     username = "ndshare@fg-inc.net"
-#     password = "NDuploads18!"
+#     username = "***"
+#     password = "***"
 #     client_id = 'myclientid'
 #     client_secret = 'myclientsecret'
 #
 #     token = authenticate(hostname, client_id, client_secret, username, password)
-# api = "https://foresitegroupinc.sf-api.com/sf/v3"
+# api = "***"

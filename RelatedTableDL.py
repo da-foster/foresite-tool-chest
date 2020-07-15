@@ -11,9 +11,9 @@ from pathlib import Path
 import pandas as pd
 
 #Log in authentication for AGOL
-gis = GIS(url="https://www.arcgis.com/sharing/rest/oauth2/authorize?client_id=arcgisonline&display=default&response_type=token&state=%7B%22useLandingPage%22%3Atrue%7D&expiration=20160&locale=en-us&redirect_uri=https%3A%2F%2Fwww.arcgis.com%2Fhome%2Faccountswitcher-callback.html&force_login=true&showSignupOption=true", \
-          username="fg_WS1", \
-          password="GISws101!")
+gis = GIS(url="***", \
+          username="***", \
+          password="***")
 
 #Basic search for content within the account that starts with "Mono"
 results = gis.content.search("Mono")
@@ -69,9 +69,9 @@ from pathlib import Path
 import pandas as pd
 
 #Log in authentication for AGOL
-gis = GIS(url="https://www.arcgis.com/sharing/rest/oauth2/authorize?client_id=arcgisonline&display=default&response_type=token&state=%7B%22useLandingPage%22%3Atrue%7D&expiration=20160&locale=en-us&redirect_uri=https%3A%2F%2Fwww.arcgis.com%2Fhome%2Faccountswitcher-callback.html&force_login=true&showSignupOption=true", \
-          username="fg_WS1", \
-          password="GISws101!")
+gis = GIS(url="***", \
+          username="***", \
+          password="***")
 
 #Capture a specific entity within AGOl by specifying its "ID"
 featureLayer = gis.content.get("6d4af05336e44a3c9a33c59260b42b0a")

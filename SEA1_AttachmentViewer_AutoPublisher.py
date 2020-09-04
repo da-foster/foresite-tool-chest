@@ -13,7 +13,7 @@ from datetime import datetime
 arcpy.env.overwriteOutput = True
 
 ### Sign in to portal (In this case, sign into ArcGIS Online) ###
-arcpy.SignInToPortal('https://www.arcgis.com', 'fgarconline', 'ForesiteROKS19!')
+arcpy.SignInToPortal('https://www.arcgis.com', '$$$$$', '$$$$$')
 
 ### Set constants ###
 OUT_DIR = r'\\fginc-file\GIS\Foster\AutoPublishing\SEA1_AttachmentViewer'
@@ -23,7 +23,7 @@ SD_FILENAME = SERVICE + '.sd'
 LOG = r'\\fginc-file\GIS\Foster\AutoPublishing\SEA1_AttachmentViewer\Logger.txt'
 
 ### Construct a GIS object ###
-gis = GIS('https://www.arcgis.com', 'fgarconline', 'ForesiteROKS19!')
+gis = GIS('https://www.arcgis.com', '$$$$$', '$$$$$')
 
 ### Paths to the Service Definition and the Draft ###
 sdDraftOutput = os.path.join(OUT_DIR, SD_DRAFT)

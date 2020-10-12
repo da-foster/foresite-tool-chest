@@ -10,6 +10,14 @@
 import arcpy
 
 def obliterate(group, dataIn, inputGDB=None):
+    """
+    Function to remove all feature classes, domain values, feature datasets,  
+    & SDE tables from an Enterprise GDB.
+    
+    Parameter 1 = The kind of input data. 
+    Parameter 2 = A list of input data. 
+    Parameter 3 (Optional) = An input GDB
+    """
     
     if group == 'feature classes':
         

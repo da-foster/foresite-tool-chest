@@ -66,7 +66,6 @@ class InternalIdUpdater:
             self.num += interval
         return self.num
 
-
     #Method to determine the prefix
     def selectPrefix(self):
         pfx = None
@@ -132,7 +131,6 @@ class InternalIdUpdater:
             edit.stopOperation()
             edit.stopEditing(True)
             print('Complete')
-
 
 #Main Fuction
 if __name__ == '__main__':

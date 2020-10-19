@@ -7,9 +7,9 @@
 ### MUST RUN IN PYTHON 2.7 ###
 
 import arcpy
+import os
 
 class InternalIdUpdater:
-    
     #Constructor
     def __init__(self, typeOfData, inputData):
         self.typeOfData = typeOfData
@@ -32,14 +32,12 @@ class InternalIdUpdater:
                          'splice': 'SPL-',
                          'structure': 'STR-'}
 
-
     #Method to append all the numbers from the IntervalID field into the list
     def fillList(self):
         with arcpy.da.SearchCursor(self.inputData, self.fields) as cur:
             for row in cur:
                 if row[0] is not None:
                     self.arr.append(row[0])
-
 
     #Method to find the highest number in the list
     def findHighestVal(self):
@@ -50,8 +48,15 @@ class InternalIdUpdater:
             print('Max num is: ' + str(max_num))
             self.num = max_num
 
+    #Method to get the path to the SDE
+    def getDbPath(self):
+        sdePath = os.path.dirname(self.inputData)
+        if [any(ext) for ext in ('.gdb', '.sde') if ext in os.path.splitext(sdePath)]:
+            return sdePath
+        else:
+            return os.path.dirname(sdePath)
 
-    # Method to return the next interval
+    #Method to return the next interval
     def autoIncrement(self):
         #global num
         interval = 1
@@ -99,7 +104,6 @@ class InternalIdUpdater:
     ### Method to update the IntervalID & FG_ID fields ###
     def updateFields(self):
         flName = self.typeOfData + '_featurelayer'
-        print(flName)
         arcpy.MakeFeatureLayer_management(self.inputData, flName)
         arcpy.SelectLayerByAttribute_management(flName, "NEW_SELECTION", "INTERVAL_ID IS NULL")
 
@@ -108,26 +112,31 @@ class InternalIdUpdater:
             print('Complete')
 
         else:
+            workspace = self.getDbPath()
+            edit = arcpy.da.Editor(workspace)
+            edit.startEditing(False, False)
+            edit.startOperation()
             print('Selection count is: ' + str(arcpy.GetCount_management(flName)))
             with arcpy.da.UpdateCursor(flName, self.fields) as cur:
                 for row in cur:
                     # Update the IntervalID field
                     val = self.autoIncrement()
-                    arcpy.AddMessage('Val = ' + str(val))
-                    #print('Val = ' + str(val))
+                    print('Val = ' + str(val))
                     row[0] = val
                     # Update the FG_ID field
                     code = self.selectPrefix()
                     fgID = code + str(val)
-                    arcpy.AddMessage('FG_ID = ' + fgID)
-                    #print('FG_ID = ' + fgID)
+                    print('FG_ID = ' + fgID)
                     row[1] = fgID
                     cur.updateRow(row)
+            edit.stopOperation()
+            edit.stopEditing(True)
             print('Complete')
 
 
 #Main Fuction
 if __name__ == '__main__':
+
     anchorsFC = r'\\fginc-file\GIS\dbConnections\TEST_ENVS\TEST_2 as GISADMIN.sde\TEST_2.DBO.SEA1_Detailed_Design_Tryouts\TEST_2.DBO.Anchor_SEA1'
     borepitFC = r'\\fginc-file\GIS\dbConnections\TEST_ENVS\TEST_2 as GISADMIN.sde\TEST_2.DBO.SEA1_Detailed_Design_Tryouts\TEST_2.DBO.Bore_pits_SEA1'
     fiberFC = r'\\fginc-file\GIS\dbConnections\TEST_ENVS\TEST_2 as GISADMIN.sde\TEST_2.DBO.SEA1_Detailed_Design_Tryouts\TEST_2.DBO.fiberCable_SEA1'
@@ -143,19 +152,86 @@ if __name__ == '__main__':
     spliceFC = r'\\fginc-file\GIS\dbConnections\TEST_ENVS\TEST_2 as GISADMIN.sde\TEST_2.DBO.SEA1_Detailed_Design_Tryouts\TEST_2.DBO.spliceclosure_SEA1'
     structureFC = r'\\fginc-file\GIS\dbConnections\TEST_ENVS\TEST_2 as GISADMIN.sde\TEST_2.DBO.SEA1_Detailed_Design_Tryouts\TEST_2.DBO.structure_SEA1'
 
+    #Anchor Instance
     anchorInst = InternalIdUpdater('anchors', anchorsFC)
-    borepitInst = InternalIdUpdater('borepits', borepitFC)
-    fiberInst = InternalIdUpdater('fibercables', fiberFC)
-    equipInst = InternalIdUpdater('equipment', equipFC)
-    midspanInst = InternalIdUpdater('midspan', midspanFC)
-    permitInst = InternalIdUpdater('permits', permitFC)
-    poleInst = InternalIdUpdater('poles', poleFC)
-    qcpInst = InternalIdUpdater('polygons', qcpFC)
-    sectorInst = InternalIdUpdater('sectors', sectorFC)
-    slackInst = InternalIdUpdater('slackloops', slackFC)
-    interceptInst = InternalIdUpdater('intercepts', interceptFC)
-    spanInst = InternalIdUpdater('span', spanFC)
-    spliceInst = InternalIdUpdater('spliceclosures', spliceFC)
-    structureInst = InternalIdUpdater('structures', structureFC)
-
+    anchorInst.fillList()
+    anchorInst.findHighestVal()
+    anchorInst.updateFields()
     
+    #Bore Pit Instance
+    borepitInst = InternalIdUpdater('borepits', borepitFC)
+    borepitInst.fillList()
+    borepitInst.findHighestVal()
+    borepitInst.updateFields()
+    
+    #Fiber cable Instance
+    fiberInst = InternalIdUpdater('fibercables', fiberFC)
+    fiberInst.fillList()
+    fiberInst.findHighestVal()
+    fiberInst.updateFields()
+    
+    #Fiber Equipment Instance
+    equipInst = InternalIdUpdater('equipment', equipFC)
+    equipInst.fillList()
+    equipInst.findHighestVal()
+    equipInst.updateFields()
+
+    #Midspance Clearance Instance
+    midspanInst = InternalIdUpdater('midspan', midspanFC)
+    midspanInst.fillList()
+    midspanInst.findHighestVal()
+    midspanInst.updateFields()
+    
+    #Permit Polygons Instance
+    permitInst = InternalIdUpdater('permits', permitFC)
+    permitInst.fillList()
+    permitInst.findHighestVal()
+    permitInst.updateFields()
+
+    #Poles Instance
+    poleInst = InternalIdUpdater('poles', poleFC)
+    poleInst.fillList()
+    poleInst.findHighestVal()
+    poleInst.updateFields()
+
+    #QC Polygons Instance
+    qcpInst = InternalIdUpdater('polygons', qcpFC)
+    qcpInst.fillList()
+    qcpInst.findHighestVal()
+    qcpInst.updateFields()
+    
+    #Sector Carrier Groups Instance
+    sectorInst = InternalIdUpdater('sectors', sectorFC)
+    sectorInst.fillList()
+    sectorInst.findHighestVal()
+    sectorInst.updateFields()
+
+    #Slackloop Instance
+    slackInst = InternalIdUpdater('slackloops', slackFC)
+    slackInst.fillList()
+    slackInst.findHighestVal()
+    slackInst.updateFields()
+
+    #Span Intercept Instance
+    interceptInst = InternalIdUpdater('intercepts', interceptFC)
+    interceptInst.fillList()
+    interceptInst.findHighestVal()
+    interceptInst.updateFields()
+    
+    #Span Instance
+    spanInst = InternalIdUpdater('span', spanFC)
+    spanInst.fillList()
+    spanInst.findHighestVal()
+    spanInst.updateFields()
+
+    #Splice Closure Instance
+    spliceInst = InternalIdUpdater('spliceclosures', spliceFC)
+    spliceInst.fillList()
+    spliceInst.findHighestVal()
+    spliceInst.updateFields()
+
+    #Structure Instance
+    structureInst = InternalIdUpdater('structures', structureFC)
+    structureInst.fillList()
+    structureInst.findHighestVal()
+    structureInst.updateFields()
